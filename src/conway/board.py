@@ -34,6 +34,8 @@ class _Board:
             return 0;
         # Accessing a single element of a bitarray always returns either 0 or 1.
         return self._board[x + y*self._height]; # type: ignore
+    def wipeout(self):
+        self._board[:] = True;
     def kill_cell(self, x: int, y: int):
         if x < 0 or x >= self._width or y < 0 or y >= self._height:
             return;
