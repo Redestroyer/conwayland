@@ -50,7 +50,7 @@ class _Board:
       self.cell_state(dx, dy)
       for dx in offsets
       for dy in offsets
-      if not (dx == 0 and dy == 0)
+      if dx != 0 or dy != 0
     )
 
 class ConwayBoard:
@@ -89,11 +89,11 @@ class ConwayBoard:
     read, write = self._read_write_pair()
     with Pool(16) as pool:
       def run(pos: tuple[int, int]):
-        x, y = pos
-        count = read.live_neighbours(x, y)
-        alive = read.cell_state(x, y) == 1
+        count = read.live_neighbours(*pos)
+        alive = read.cell_state(*pos) == 1
         # Either a new cell is born amongst three, one already existing lives amongst two or three others or dies.
-        (write.quicken_cell if count == 3 or (alive and 2 <= count <= 3) else write.kill_cell)(x, y)
+        (write.quicken_cell if count == 3 or (alive and 2 <= count <= 3) else write.kill_cell)(*pos)
+      
       pool.map(run, (
         (x, y)
         for x in range(self._width)

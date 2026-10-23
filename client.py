@@ -5,24 +5,37 @@ This is the client script, setting up the user interface for connecting to the s
 from tkinter import *  # pyright: ignore[reportWildcardImportFromLibrary]
 from tkinter.ttk import *  # pyright: ignore[reportWildcardImportFromLibrary]
 
-from ttkthemes import ThemedStyle
-
+#from ttkthemes import ThemedStyle, ThemedTk
 from colours import *
+from widgets import pack_all
 
 
 class Window(Tk):
   """
   The client window.
   """
-  def __init__(self, width: int = 1280, height: int = 720):
+  def __init__(self, width: int = 640, height: int = 360):
     super().__init__("Conwayland")
-    self.geometry(f"{width}x{height}")
+    x, y = self.winfo_screenwidth() - width, self.winfo_screenheight() - height
+    x >>= 1
+    y >>= 1
+    self.geometry(f"{width}x{height}+{x}+{y}")
+    self.resizable(False, False)
+    self.attributes("-alpha", 0.8) # type: ignore
 
-    self.style = ThemedStyle(self, theme="arc")
+    self.style = Style(self)
+    self.style.theme_create("Conwayland", "default", {
+      "TLabel": {
+        "configure": {
+          "foreground": SLATE700,
+          "background": SLATE200
+        }
+      }
+    })
     
     self.label_hello = Label(self, text="Hello, world!")
     self.button_quit = Button(self, text="Quit", command=self.quit)
-    print("All has been set!")
+    pack_all(self.label_hello, self.button_quit)
 
 def main():
   root = Window()
