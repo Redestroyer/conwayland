@@ -81,6 +81,10 @@ class ConwayBoard:
     First is read, second is write.
     """
     return (self._board2, self._board1) if self._alter else (self._board1, self._board2)
+  
+  def cell_state(self, x: int, y: int) -> bool:
+    read, _ = self._read_write_pair()
+    return read.cell_state(x, y) == 1
 
   def tick(self):
     """

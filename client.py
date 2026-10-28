@@ -6,8 +6,9 @@ from tkinter import *  # pyright: ignore[reportWildcardImportFromLibrary]
 from tkinter.ttk import *  # pyright: ignore[reportWildcardImportFromLibrary]
 
 #from ttkthemes import ThemedStyle, ThemedTk
+from board_widget import BoardWidget
 from colours import *
-from widgets import pack_all
+from conway import ConwayBoard
 
 
 class Window(Tk):
@@ -21,7 +22,7 @@ class Window(Tk):
     y >>= 1
     self.geometry(f"{width}x{height}+{x}+{y}")
     self.resizable(False, False)
-    self.attributes("-alpha", 0.8) # type: ignore
+    self.attributes("-alpha", 0.9) # type: ignore
 
     self.style = Style(self)
     self.style.theme_create("Conwayland", "default", {
@@ -30,12 +31,21 @@ class Window(Tk):
           "foreground": SLATE700,
           "background": SLATE200
         }
+      },
+      
+      "TBoardWidget": {
+        "configure": {
+          "background": SLATE900,
+          "foreground": SLATE100
+        }
       }
     })
+    self.style.theme_use("Conwayland")
     
-    self.label_hello = Label(self, text="Hello, world!")
+    self.board = BoardWidget(self, board=ConwayBoard(16, 16), style="TBoardWidget")
     self.button_quit = Button(self, text="Quit", command=self.quit)
-    pack_all(self.label_hello, self.button_quit)
+    self.board.pack()
+    self.button_quit.pack()
 
 def main():
   root = Window()

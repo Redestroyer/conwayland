@@ -1,3 +1,3 @@
-from board import ConwayBoard
+from .board import ConwayBoard
 
 __all__ = ["ConwayBoard"];
