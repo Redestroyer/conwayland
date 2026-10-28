@@ -44,6 +44,10 @@ class _Board:
     if x < 0 or x >= self._width or y < 0 or y >= self._height:
       return
     self._board[x + y*self._height] = 1
+  def toggle_cell(self, x: int, y: int):
+    if x < 0 or x >= self._width or y < 0 or y >= self._height:
+      return
+    self._board.invert(x + y*self._height)
   def live_neighbours(self, x: int, y: int) -> int:
     offsets = [-1, 0, 1]
     return sum(
@@ -85,6 +89,10 @@ class ConwayBoard:
   def cell_state(self, x: int, y: int) -> bool:
     read, _ = self._read_write_pair()
     return read.cell_state(x, y) == 1
+  
+  def toggle_cell(self, x: int, y: int):
+    read, _ = self._read_write_pair()
+    return read.toggle_cell(x, y)
 
   def tick(self):
     """
