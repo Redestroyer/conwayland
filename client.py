@@ -5,16 +5,36 @@ This is the client script, setting up the user interface for connecting to the s
 from tkinter import *  # pyright: ignore[reportWildcardImportFromLibrary]
 from tkinter.ttk import *  # pyright: ignore[reportWildcardImportFromLibrary]
 
-#from ttkthemes import ThemedStyle, ThemedTk
 from board_widget import BoardWidget
 from colours import *
 from conway import ConwayBoard
+from widgets import pack_all
 
 
 class Window(Tk):
   """
   The client window.
   """
+  class ControlButtons(Frame):
+    """
+    Frame containing buttons to control the board.
+    """
+    def __init__(self, master: Misc, *, board: BoardWidget):
+      super().__init__(
+        master
+      )
+      self.wipeout_button = Button(
+        self,
+        text="Clear",
+        command=board.wipeout
+      )
+      self.tick_button = Button(
+        self,
+        text="Step",
+        command=board.run_tick
+      )
+      pack_all(self.wipeout_button, self.tick_button)
+
   def __init__(self, width: int = 640, height: int = 360):
     super().__init__("Conwayland")
     x, y = self.winfo_screenwidth() - width, self.winfo_screenheight() - height
@@ -43,8 +63,10 @@ class Window(Tk):
     self.style.theme_use("Conwayland")
     
     self.board = BoardWidget(self, board=ConwayBoard(16, 16), style="TBoardWidget")
+    self.control = Window.ControlButtons(self, board=self.board)
     self.button_quit = Button(self, text="Quit", command=self.quit)
-    self.board.pack()
+    self.board.pack(side="left")
+    self.control.pack(side="right")
     self.button_quit.pack()
 
 def main():
