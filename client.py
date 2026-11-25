@@ -7,7 +7,7 @@ from tkinter.ttk import *  # pyright: ignore[reportWildcardImportFromLibrary]
 
 from board_widget import BoardWidget
 from colours import *
-from conway import ConwayBoard
+from tabber import Tabber
 from widgets import pack_all
 
 
@@ -35,7 +35,7 @@ class Window(Tk):
       )
       pack_all(self.wipeout_button, self.tick_button)
 
-  def __init__(self, width: int = 640, height: int = 360):
+  def __init__(self, width: int = 1280, height: int = 720):
     super().__init__("Conwayland")
     x, y = self.winfo_screenwidth() - width, self.winfo_screenheight() - height
     x >>= 1
@@ -62,12 +62,11 @@ class Window(Tk):
     })
     self.style.theme_use("Conwayland")
     
-    self.board = BoardWidget(self, board=ConwayBoard(16, 16), style="TBoardWidget")
-    self.control = Window.ControlButtons(self, board=self.board)
+    self.tabber = Tabber(self)
+    self.tabber.pack(side="top")
+    
     self.button_quit = Button(self, text="Quit", command=self.quit)
-    self.board.pack(side="left")
-    self.control.pack(side="right")
-    self.button_quit.pack()
+    self.button_quit.pack(side="bottom")
 
 def main():
   root = Window()

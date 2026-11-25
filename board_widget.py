@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from tkinter import Misc
+from tkinter import Misc, StringVar
 from tkinter.ttk import Button, Frame, LabelFrame
 from typing import Any, Self
 
@@ -71,9 +71,10 @@ class Cell(Frame):
     self.x = x
     self.y = y
     self._alive = alive
+    self._text = StringVar(self, self.life_text)
     self.label = Button(
       self,
-      text=self.life_text,
+      textvariable=self._text,
       command=lambda : command(self)
     )
     self.label.pack(expand=True, fill="both")
@@ -90,9 +91,7 @@ class Cell(Frame):
     if self._alive == value:
       return
     self._alive = value
-    self.label.configure(
-      text=self.life_text
-    )
+    self._text.set(self.life_text)
   @property
   def life_text(self) -> str:
     return "A" if self.alive else "D"
